@@ -29,15 +29,15 @@ public class SalaryController {
     // Получение одной записи (GET)
     @GetMapping("/dep/{id}")
     @ResponseStatus(HttpStatus.FOUND)
-    public DepartmentResponse departmentRead(@PathVariable("id") Integer id) {
-        return salaryService.departmentRead(id);
+    public DepartmentResponse departmentGetById(@PathVariable("id") Integer id) {
+        return salaryService.departmentGetById(id);
     }
 
     // Получение всех записей (GET)
     @GetMapping("/dep/")
     @ResponseStatus(HttpStatus.OK)
-    public DepartmentListResponse departmentRead() {
-        return salaryService.departmentRead();
+    public DepartmentListResponse departmentGetAll() {
+        return salaryService.departmentGetAll();
     }
 
     // Изменение записи (PUT)
@@ -67,15 +67,15 @@ public class SalaryController {
     // Получение одной записи (GET)
     @GetMapping("/worker/{id}")
     @ResponseStatus(HttpStatus.FOUND)
-    public WorkerResponse workerRead(@PathVariable("id") Integer id) {
-        return salaryService.workerRead(id);
+    public WorkerResponse workerGetById(@PathVariable("id") Integer id) {
+        return salaryService.workerGetById(id);
     }
 
     // Получение всех записей (GET)
     @GetMapping("/worker/")
     @ResponseStatus(HttpStatus.OK)
-    public WorkerListResponse workerRead() {
-        return salaryService.workerRead();
+    public WorkerListResponse workerGetAll() {
+        return salaryService.workerGetAll();
     }
 
     // Изменение записи (PUT)
@@ -105,15 +105,15 @@ public class SalaryController {
     // Получение одной записи (GET)
     @GetMapping("/payment/{id}")
     @ResponseStatus(HttpStatus.FOUND)
-    public PaymentOrderResponse paymentOrderRead(@PathVariable("id") Integer id) {
-        return salaryService.paymentOrderRead(id);
+    public PaymentOrderResponse paymentOrderGetById(@PathVariable("id") Integer id) {
+        return salaryService.paymentOrderGetById(id);
     }
 
     // Получение всех записей (GET)
     @GetMapping("/payment/")
     @ResponseStatus(HttpStatus.OK)
-    public PaymentOrderListResponse paymentOrderRead() {
-        return salaryService.paymentOrderRead();
+    public PaymentOrderListResponse paymentOrderGetAll() {
+        return salaryService.paymentOrderGetAll();
     }
 
     // Изменение записи (PUT)

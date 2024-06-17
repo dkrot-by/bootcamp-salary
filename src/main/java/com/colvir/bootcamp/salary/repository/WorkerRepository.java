@@ -20,17 +20,17 @@ public class WorkerRepository {
     private final Set<Worker> workers = new HashSet<>();
 
     // Создание записи
-    public void create(Worker worker) {
+    public void save(Worker worker) {
         workers.add(worker);
     }
 
     // Получение всех записей
-    public List<Worker> read() {
+    public List<Worker> getAll() {
         return new ArrayList<>(workers);
     }
 
     // Получение записи
-    public Worker read(Integer id) {
+    public Worker getById(Integer id) {
         return workers.stream()
                 .filter(w -> w.getId().equals(id))
                 .findFirst()
@@ -38,7 +38,7 @@ public class WorkerRepository {
     }
 
     // Получение списка записей по Подразделению
-    public List<Worker> read(Department department) {
+    public List<Worker> getByDepartment(Department department) {
         return workers.stream()
                 .filter(w -> w.getDepartment().getId().equals(department.getId()))
                 .collect(Collectors.toList());
@@ -46,7 +46,7 @@ public class WorkerRepository {
 
     // Обновление записи
     public void update(Worker worker) {
-        Worker workerInStorage = read(worker.getId());
+        Worker workerInStorage = getById(worker.getId());
         workerInStorage.setName(worker.getName());
         workerInStorage.setSalary(worker.getSalary());
         workerInStorage.setDepartment(worker.getDepartment());
@@ -54,7 +54,7 @@ public class WorkerRepository {
 
     // Удаление записи
     public void delete(Integer id) {
-        workers.remove(read(id));
+        workers.remove(getById(id));
     }
 
 }

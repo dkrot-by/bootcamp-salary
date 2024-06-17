@@ -91,11 +91,11 @@ public class SalaryServiceTest {
             departmentResponses.add(new DepartmentResponse(2, "Dep 2"));
             departmentResponseList = new DepartmentListResponse(departmentResponses);
         }
-        doNothing().when(departmentRepository).create(any());
-        when(departmentRepository.read(1)).thenReturn(department1);
-        when(departmentRepository.read(2)).thenReturn(department2);
-        when(departmentRepository.read(3)).thenReturn(null);
-        when(departmentRepository.read()).thenReturn(departments);
+        doNothing().when(departmentRepository).save(any());
+        when(departmentRepository.getById(1)).thenReturn(department1);
+        when(departmentRepository.getById(2)).thenReturn(department2);
+        when(departmentRepository.getById(3)).thenReturn(null);
+        when(departmentRepository.getAll()).thenReturn(departments);
         doNothing().when(departmentRepository).update(any());
         doNothing().when(departmentRepository).delete(any());
 
@@ -110,11 +110,11 @@ public class SalaryServiceTest {
             workerResponses.add(new WorkerResponse(2, 1, "Dep 1", "John Connor", 200F));
             workerResponseList = new WorkerListResponse(workerResponses);
         }
-        doNothing().when(workerRepository).create(any());
-        when(workerRepository.read(1)).thenReturn(worker1);
-        when(workerRepository.read(2)).thenReturn(worker2);
-        when(workerRepository.read(3)).thenReturn(null);
-        when(workerRepository.read()).thenReturn(workers);
+        doNothing().when(workerRepository).save(any());
+        when(workerRepository.getById(1)).thenReturn(worker1);
+        when(workerRepository.getById(2)).thenReturn(worker2);
+        when(workerRepository.getById(3)).thenReturn(null);
+        when(workerRepository.getAll()).thenReturn(workers);
         doNothing().when(workerRepository).update(any());
         doNothing().when(workerRepository).delete(any());
 
@@ -129,11 +129,11 @@ public class SalaryServiceTest {
             paymentResponses.add(new PaymentOrderResponse(2, 1, "Thomas Anderson", new Date(2024, 03, 15), 20F));
             paymentResponseList = new PaymentOrderListResponse(paymentResponses);
         }
-        doNothing().when(paymentOrderRepository).create(any());
-        when(paymentOrderRepository.read(1)).thenReturn(payment1);
-        when(paymentOrderRepository.read(2)).thenReturn(payment2);
-        when(paymentOrderRepository.read(3)).thenReturn(null);
-        when(paymentOrderRepository.read()).thenReturn(payments);
+        doNothing().when(paymentOrderRepository).save(any());
+        when(paymentOrderRepository.getById(1)).thenReturn(payment1);
+        when(paymentOrderRepository.getById(2)).thenReturn(payment2);
+        when(paymentOrderRepository.getById(3)).thenReturn(null);
+        when(paymentOrderRepository.getAll()).thenReturn(payments);
         doNothing().when(paymentOrderRepository).update(any());
         doNothing().when(paymentOrderRepository).delete(any());
     }
@@ -150,7 +150,7 @@ public class SalaryServiceTest {
         DepartmentResponse actualResponse = salaryService.departmentCreate(departmentRequest3);
         // Проверка результата
         assertEquals(expectedResponse, actualResponse);
-        verify(departmentRepository, Mockito.times(1)).create(any());
+        verify(departmentRepository, Mockito.times(1)).save(any());
     }
 
     @Test
@@ -160,7 +160,7 @@ public class SalaryServiceTest {
         // Тест
         assertThrows(RecordExistsException.class, () -> salaryService.departmentCreate(departmentRequest1));
         // Проверка результата
-        verify(departmentRepository, Mockito.times(0)).create(any());
+        verify(departmentRepository, Mockito.times(0)).save(any());
     }
 
     @Test
@@ -169,7 +169,7 @@ public class SalaryServiceTest {
         PrepareData();
         DepartmentResponse expectedResponse = new DepartmentResponse(1,"Dep 1");
         // Тест
-        DepartmentResponse actualResponse = salaryService.departmentRead(1);
+        DepartmentResponse actualResponse = salaryService.departmentGetById(1);
         // Проверка результата
         assertEquals(expectedResponse, actualResponse);
     }
@@ -179,7 +179,7 @@ public class SalaryServiceTest {
         // Подготовка данных
         PrepareData();
         // Тест
-        DepartmentListResponse actualResponse = salaryService.departmentRead();
+        DepartmentListResponse actualResponse = salaryService.departmentGetAll();
         // Проверка результата
         assertEquals(departmentResponseList, actualResponse);
     }
@@ -189,7 +189,7 @@ public class SalaryServiceTest {
         // Подготовка данных
         PrepareData();
         // Тест
-        assertThrows(RecordNotExistsException.class, () -> salaryService.departmentRead(3));
+        assertThrows(RecordNotExistsException.class, () -> salaryService.departmentGetById(3));
     }
 
     @Test
@@ -249,7 +249,7 @@ public class SalaryServiceTest {
         WorkerResponse actualResponse = salaryService.workerCreate(workerRequest3);
         // Проверка результата
         assertEquals(expectedResponse, actualResponse);
-        verify(workerRepository, Mockito.times(1)).create(any());
+        verify(workerRepository, Mockito.times(1)).save(any());
     }
 
     @Test
@@ -259,7 +259,7 @@ public class SalaryServiceTest {
         // Тест
         assertThrows(RecordExistsException.class, () -> salaryService.workerCreate(workerRequest1));
         // Проверка результата
-        verify(workerRepository, Mockito.times(0)).create(any());
+        verify(workerRepository, Mockito.times(0)).save(any());
     }
 
     @Test
@@ -268,7 +268,7 @@ public class SalaryServiceTest {
         PrepareData();
         WorkerResponse expectedResponse = new WorkerResponse(1, 1, "Dep 1", "Thomas Anderson", 100F);
         // Тест
-        WorkerResponse actualResponse = salaryService.workerRead(1);
+        WorkerResponse actualResponse = salaryService.workerGetById(1);
         // Проверка результата
         assertEquals(expectedResponse, actualResponse);
     }
@@ -278,7 +278,7 @@ public class SalaryServiceTest {
         // Подготовка данных
         PrepareData();
         // Тест
-        WorkerListResponse actualResponse = salaryService.workerRead();
+        WorkerListResponse actualResponse = salaryService.workerGetAll();
         // Проверка результата
         assertEquals(workerResponseList, actualResponse);
     }
@@ -288,7 +288,7 @@ public class SalaryServiceTest {
         // Подготовка данных
         PrepareData();
         // Тест
-        assertThrows(RecordNotExistsException.class, () -> salaryService.workerRead(3));
+        assertThrows(RecordNotExistsException.class, () -> salaryService.workerGetById(3));
     }
 
     @Test
@@ -348,7 +348,7 @@ public class SalaryServiceTest {
         PaymentOrderResponse actualResponse = salaryService.paymentOrderCreate(paymentRequest3);
         // Проверка результата
         assertEquals(expectedResponse, actualResponse);
-        verify(paymentOrderRepository, Mockito.times(1)).create(any());
+        verify(paymentOrderRepository, Mockito.times(1)).save(any());
     }
 
     @Test
@@ -358,7 +358,7 @@ public class SalaryServiceTest {
         // Тест
         assertThrows(RecordExistsException.class, () -> salaryService.paymentOrderCreate(paymentRequest1));
         // Проверка результата
-        verify(paymentOrderRepository, Mockito.times(0)).create(any());
+        verify(paymentOrderRepository, Mockito.times(0)).save(any());
     }
 
     @Test
@@ -367,7 +367,7 @@ public class SalaryServiceTest {
         PrepareData();
         PaymentOrderResponse expectedResponse = new PaymentOrderResponse(1, 1, "Thomas Anderson", new Date(2024, 03, 15), 15F);
         // Тест
-        PaymentOrderResponse actualResponse = salaryService.paymentOrderRead(1);
+        PaymentOrderResponse actualResponse = salaryService.paymentOrderGetById(1);
         // Проверка результата
         assertEquals(expectedResponse, actualResponse);
     }
@@ -377,7 +377,7 @@ public class SalaryServiceTest {
         // Подготовка данных
         PrepareData();
         // Тест
-        PaymentOrderListResponse actualResponse = salaryService.paymentOrderRead();
+        PaymentOrderListResponse actualResponse = salaryService.paymentOrderGetAll();
         // Проверка результата
         assertEquals(paymentResponseList, actualResponse);
     }
@@ -387,7 +387,7 @@ public class SalaryServiceTest {
         // Подготовка данных
         PrepareData();
         // Тест
-        assertThrows(RecordNotExistsException.class, () -> salaryService.paymentOrderRead(3));
+        assertThrows(RecordNotExistsException.class, () -> salaryService.paymentOrderGetById(3));
     }
 
     @Test

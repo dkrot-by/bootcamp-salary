@@ -20,17 +20,17 @@ public class PaymentOrderRepository {
     private final Set<PaymentOrder> paymentOrders = new HashSet<>();
 
     // Создание записи
-    public void create(PaymentOrder paymentOrder) {
+    public void save(PaymentOrder paymentOrder) {
         paymentOrders.add(paymentOrder);
     }
 
     // Получение всех записей
-    public List<PaymentOrder> read() {
+    public List<PaymentOrder> getAll() {
         return new ArrayList<>(paymentOrders);
     }
 
     // Получение записи
-    public PaymentOrder read(Integer id) {
+    public PaymentOrder getById(Integer id) {
         return paymentOrders.stream()
                 .filter(p -> p.getId().equals(id))
                 .findFirst()
@@ -38,7 +38,7 @@ public class PaymentOrderRepository {
     }
 
     // Получение списка записей по Работнику
-    public List<PaymentOrder> read(Worker worker) {
+    public List<PaymentOrder> getByWorker(Worker worker) {
         return paymentOrders.stream()
                 .filter(p -> p.getWorker().getId().equals(worker.getId()))
                 .collect(Collectors.toList());
@@ -46,7 +46,7 @@ public class PaymentOrderRepository {
 
     // Обновление записи
     public void update(PaymentOrder paymentOrder) {
-        PaymentOrder paymentOrderInStorage = read(paymentOrder.getId());
+        PaymentOrder paymentOrderInStorage = getById(paymentOrder.getId());
         paymentOrderInStorage.setDate(paymentOrder.getDate());
         paymentOrderInStorage.setSum(paymentOrder.getSum());
         paymentOrderInStorage.setWorker(paymentOrder.getWorker());
@@ -54,7 +54,7 @@ public class PaymentOrderRepository {
 
     // Удаление записи
     public void delete(Integer id) {
-        paymentOrders.remove(read(id));
+        paymentOrders.remove(getById(id));
     }
 
 }
