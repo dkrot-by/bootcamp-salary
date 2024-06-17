@@ -15,17 +15,17 @@ public class DepartmentRepository {
     private final Set<Department> departments = new HashSet<>();
 
     // Создание записи
-    public void create(Department department) {
+    public void save(Department department) {
         departments.add(department);
     }
 
     // Получение всех записей
-    public List<Department> read() {
+    public List<Department> getAll() {
         return new ArrayList<>(departments);
     }
 
     // Получение записи
-    public Department read(Integer id) {
+    public Department getById(Integer id) {
         return departments.stream()
                 .filter(d -> d.getId().equals(id))
                 .findFirst()
@@ -34,14 +34,14 @@ public class DepartmentRepository {
 
     // Обновление записи
     public void update(Department department) {
-        Department departmentInStorage = read(department.getId());
+        Department departmentInStorage = getById(department.getId());
         departmentInStorage.setName(department.getName());
         departmentInStorage.setWorkers(department.getWorkers());
     }
 
     // Удаление записи
     public void delete(Integer id) {
-        departments.remove(read(id));
+        departments.remove(getById(id));
     }
 
 }
