@@ -1,5 +1,5 @@
 /*
-Запрос к сервису: Платеж
+Запрос к сервису: изменение Платежа
 * */
 package com.colvir.bootcamp.salary.dto;
 
@@ -10,7 +10,7 @@ import java.util.Date;
 
 @Data
 @AllArgsConstructor
-public class PaymentOrderRequest {
+public class PaymentOrderUpdateRequest {
 
     private Integer id;
     private Integer workerId;

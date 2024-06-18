@@ -11,8 +11,11 @@ import java.util.List;
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface WorkerMapper {
 
-    // Запрос -> сущность
-    Worker requestToWorker(WorkerRequest request);
+    // Запрос на создание -> сущность
+    Worker createRequestToWorker(WorkerCreateRequest request);
+
+    // Запрос на изменение -> сущность
+    Worker updateRequestToWorker(WorkerUpdateRequest request);
 
     // Сущность -> ответ, в сущности есть ссылка на родительский объект Подразделение,
     // поэтому вытягиваем из него в ответ дополнительные поля: id и наименование

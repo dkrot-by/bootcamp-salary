@@ -10,8 +10,11 @@ import java.util.List;
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface DepartmentMapper {
 
-    // Запрос -> сущность
-    Department requestToDepartment(DepartmentRequest request);
+    // Запрос на создание -> сущность
+    Department createRequestToDepartment(DepartmentCreateRequest request);
+
+    // Запрос на изменение -> сущность
+    Department updateRequestToDepartment(DepartmentUpdateRequest request);
 
     // Сущность -> ответ
     DepartmentResponse departmentToResponse(Department department);

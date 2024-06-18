@@ -11,8 +11,11 @@ import java.util.List;
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface PaymentOrderMapper {
 
-    // Запрос -> сущность
-    PaymentOrder RequestToPaymentOrder(PaymentOrderRequest request);
+    // Запрос на создание -> сущность
+    PaymentOrder createRequestToPaymentOrder(PaymentOrderCreateRequest request);
+
+    // Запрос на изменение -> сущность
+    PaymentOrder updateRequestToPaymentOrder(PaymentOrderUpdateRequest request);
 
     // Сущность -> ответ, в сущности есть ссылка на родительский объект Работник,
     // поэтому вытягиваем из него в ответ дополнительные поля: id и имя
