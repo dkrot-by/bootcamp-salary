@@ -1,7 +1,6 @@
 package com.colvir.bootcamp.salary.controller;
 
 import com.colvir.bootcamp.salary.dto.ErrorResponse;
-import com.colvir.bootcamp.salary.exception.RecordExistsException;
 import com.colvir.bootcamp.salary.exception.RecordNotExistsException;
 import com.colvir.bootcamp.salary.exception.SpawnedRecordsException;
 import org.springframework.http.HttpStatus;
@@ -19,13 +18,6 @@ public class ExceptionHandlerController {
     public ResponseEntity<ErrorResponse> handleRecordNotExistsException(Exception e) {
         ErrorResponse errorResponse = new ErrorResponse(RECORD_DOES_NOT_EXISTS, e.getMessage());
         return new ResponseEntity<ErrorResponse>(errorResponse, HttpStatus.NOT_FOUND);
-    }
-
-    // Ошибка: Запись уже существует (при добавлении новой)
-    @ExceptionHandler(RecordExistsException.class)
-    public ResponseEntity<ErrorResponse> handleRecordExistsException(Exception e) {
-        ErrorResponse errorResponse = new ErrorResponse(RECORD_ALREADY_EXISTS, e.getMessage());
-        return new ResponseEntity<ErrorResponse>(errorResponse, HttpStatus.CONFLICT);
     }
 
     // Ошибка: Существуют порожденные записи (при удалении)

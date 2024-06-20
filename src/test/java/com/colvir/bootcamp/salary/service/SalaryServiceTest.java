@@ -1,7 +1,6 @@
 package com.colvir.bootcamp.salary.service;
 
 import com.colvir.bootcamp.salary.dto.*;
-import com.colvir.bootcamp.salary.exception.RecordExistsException;
 import com.colvir.bootcamp.salary.exception.RecordNotExistsException;
 import com.colvir.bootcamp.salary.mapper.DepartmentMapperImpl;
 import com.colvir.bootcamp.salary.mapper.PaymentOrderMapperImpl;
@@ -20,8 +19,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.sql.Date;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -54,27 +53,33 @@ public class SalaryServiceTest {
     // Подразделение: Тестовые данные
     private final Department department1 = new Department(1, "Dep 1", null);
     private final Department department2 = new Department(2, "Dep 2", null);
-    private final DepartmentRequest departmentRequest1 = new DepartmentRequest(1, "Dep 1");
-    private final DepartmentRequest departmentRequest2 = new DepartmentRequest(1, "Dep 1");
-    private final DepartmentRequest departmentRequest3 = new DepartmentRequest(3, "Dep 3");
+    private final Department department3Cre = new Department(3, "Dep 3 cre", null);
+    private final Department department1Upd = new Department(1, "Dep 1 upd", null);
+    private final DepartmentCreateRequest departmentCreateRequest3 = new DepartmentCreateRequest("Dep 3 cre");
+    private final DepartmentUpdateRequest departmentUpdateRequest1 = new DepartmentUpdateRequest(1, "Dep 1 upd");
+    private final DepartmentUpdateRequest departmentUpdateRequest3 = new DepartmentUpdateRequest(3, "Dep 3 upd");
     private final List<Department> departments = new ArrayList<>();
     private DepartmentListResponse departmentResponseList = null;
 
     // Работник: Тестовые данные
     private final Worker worker1 = new Worker(1, "Thomas Anderson", 100F, department1, null);
     private final Worker worker2 = new Worker(2, "John Connor", 200F, department1, null);
-    private final WorkerRequest workerRequest1 = new WorkerRequest(1, 1, "Thomas Anderson", 100F);
-    private final WorkerRequest workerRequest2 = new WorkerRequest(2, 1, "John Connor", 200F);
-    private final WorkerRequest workerRequest3 = new WorkerRequest(3, 1, "Lara Croft", 300F);
+    private final Worker worker3Cre = new Worker(3, "Lara Croft cre", 300F, department1, null);
+    private final Worker worker1Upd = new Worker(1, "Thomas Anderson upd", 500F, department1, null);
+    private final WorkerCreateRequest workerCreateRequest3 = new WorkerCreateRequest(1, "Lara Croft cre", 300F);
+    private final WorkerUpdateRequest workerUpdateRequest1 = new WorkerUpdateRequest(1, 1, "Thomas Anderson upd", 500F);
+    private final WorkerUpdateRequest workerUpdateRequest3 = new WorkerUpdateRequest(3, 1, "Lara Croft upd", 300F);
     private final List<Worker> workers = new ArrayList<>();
     private WorkerListResponse workerResponseList = null;
 
     // Платежное поручение: Тестовые данные
     private final PaymentOrder payment1 = new PaymentOrder(1, new Date(2024, 03, 15), 15F, worker1);
     private final PaymentOrder payment2 = new PaymentOrder(2, new Date(2024, 03, 15), 20F, worker1);
-    private final PaymentOrderRequest paymentRequest1 = new PaymentOrderRequest(1, 1, new Date(2024, 03, 15), 15F);
-    private final PaymentOrderRequest paymentRequest2 = new PaymentOrderRequest(2, 1, new Date(2024, 03, 15), 20F);
-    private final PaymentOrderRequest paymentRequest3 = new PaymentOrderRequest(3, 1, new Date(2024, 03, 15), 30F);
+    private final PaymentOrder payment3Cre = new PaymentOrder(3, new Date(2024, 03, 15), 30F, worker1);
+    private final PaymentOrder payment1Upd = new PaymentOrder(1, new Date(2024, 03, 16), 100F, worker1);
+    private final PaymentOrderCreateRequest paymentCreateRequest3 = new PaymentOrderCreateRequest(1, new Date(2024, 03, 15), 30F);
+    private final PaymentOrderUpdateRequest paymentUpdateRequest1 = new PaymentOrderUpdateRequest(1, 1, new Date(2024, 03, 16), 100F);
+    private final PaymentOrderUpdateRequest paymentUpdateRequest3 = new PaymentOrderUpdateRequest(3, 1, new Date(2024, 03, 15), 40F);
     private final List<PaymentOrder> payments = new ArrayList<>();
     private PaymentOrderListResponse paymentResponseList = null;
 
@@ -91,13 +96,13 @@ public class SalaryServiceTest {
             departmentResponses.add(new DepartmentResponse(2, "Dep 2"));
             departmentResponseList = new DepartmentListResponse(departmentResponses);
         }
-        doNothing().when(departmentRepository).save(any());
+        when(departmentRepository.save(any())).thenReturn(department3Cre);
         when(departmentRepository.getById(1)).thenReturn(department1);
         when(departmentRepository.getById(2)).thenReturn(department2);
         when(departmentRepository.getById(3)).thenReturn(null);
         when(departmentRepository.getAll()).thenReturn(departments);
-        doNothing().when(departmentRepository).update(any());
-        doNothing().when(departmentRepository).delete(any());
+        when(departmentRepository.update(department1Upd)).thenReturn(department1Upd);
+        when(departmentRepository.delete(1)).thenReturn(department1);
 
         // Работник
         if (workers.isEmpty()) {
@@ -110,13 +115,13 @@ public class SalaryServiceTest {
             workerResponses.add(new WorkerResponse(2, 1, "Dep 1", "John Connor", 200F));
             workerResponseList = new WorkerListResponse(workerResponses);
         }
-        doNothing().when(workerRepository).save(any());
+        when(workerRepository.save(any())).thenReturn(worker3Cre);
         when(workerRepository.getById(1)).thenReturn(worker1);
         when(workerRepository.getById(2)).thenReturn(worker2);
         when(workerRepository.getById(3)).thenReturn(null);
         when(workerRepository.getAll()).thenReturn(workers);
-        doNothing().when(workerRepository).update(any());
-        doNothing().when(workerRepository).delete(any());
+        when(workerRepository.update(worker1Upd)).thenReturn(worker1Upd);
+        when(workerRepository.delete(1)).thenReturn(worker1);
 
         // Платежное поручение
         if (payments.isEmpty()) {
@@ -129,13 +134,13 @@ public class SalaryServiceTest {
             paymentResponses.add(new PaymentOrderResponse(2, 1, "Thomas Anderson", new Date(2024, 03, 15), 20F));
             paymentResponseList = new PaymentOrderListResponse(paymentResponses);
         }
-        doNothing().when(paymentOrderRepository).save(any());
+        when(paymentOrderRepository.save(any())).thenReturn(payment3Cre);
         when(paymentOrderRepository.getById(1)).thenReturn(payment1);
         when(paymentOrderRepository.getById(2)).thenReturn(payment2);
         when(paymentOrderRepository.getById(3)).thenReturn(null);
         when(paymentOrderRepository.getAll()).thenReturn(payments);
-        doNothing().when(paymentOrderRepository).update(any());
-        doNothing().when(paymentOrderRepository).delete(any());
+        when(paymentOrderRepository.update(payment1Upd)).thenReturn(payment1Upd);
+        when(paymentOrderRepository.delete(1)).thenReturn(payment1);
     }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -145,22 +150,12 @@ public class SalaryServiceTest {
     void departmentCreate_success() {
         // Подготовка данных
         PrepareData();
-        DepartmentResponse expectedResponse = new DepartmentResponse(3,"Dep 3");
+        DepartmentResponse expectedResponse = new DepartmentResponse(3,"Dep 3 cre");
         // Тест
-        DepartmentResponse actualResponse = salaryService.departmentCreate(departmentRequest3);
+        DepartmentResponse actualResponse = salaryService.departmentCreate(departmentCreateRequest3);
         // Проверка результата
         assertEquals(expectedResponse, actualResponse);
         verify(departmentRepository, Mockito.times(1)).save(any());
-    }
-
-    @Test
-    void departmentCreate_exception() {
-        // Подготовка данных
-        PrepareData();
-        // Тест
-        assertThrows(RecordExistsException.class, () -> salaryService.departmentCreate(departmentRequest1));
-        // Проверка результата
-        verify(departmentRepository, Mockito.times(0)).save(any());
     }
 
     @Test
@@ -196,10 +191,9 @@ public class SalaryServiceTest {
     void departmentUpdate_success() {
         // Подготовка данных
         PrepareData();
-        DepartmentRequest request = new DepartmentRequest(1, "Dep 1 upd");
         DepartmentResponse expectedResponse = new DepartmentResponse(1,"Dep 1 upd");
         // Тест
-        DepartmentResponse actualResponse = salaryService.departmentUpdate(request);
+        DepartmentResponse actualResponse = salaryService.departmentUpdate(departmentUpdateRequest1);
         // Проверка результата
         assertEquals(expectedResponse, actualResponse);
         verify(departmentRepository, Mockito.times(1)).update(any());
@@ -210,7 +204,7 @@ public class SalaryServiceTest {
         // Подготовка данных
         PrepareData();
         // Тест
-        assertThrows(RecordNotExistsException.class, () -> salaryService.departmentUpdate(departmentRequest3));
+        assertThrows(RecordNotExistsException.class, () -> salaryService.departmentUpdate(departmentUpdateRequest3));
         // Проверка результата
         verify(departmentRepository, Mockito.times(0)).update(any());
     }
@@ -244,22 +238,12 @@ public class SalaryServiceTest {
     void workerCreate_success() {
         // Подготовка данных
         PrepareData();
-        WorkerResponse expectedResponse = new WorkerResponse(3, 1, "Dep 1", "Lara Croft", 300F);
+        WorkerResponse expectedResponse = new WorkerResponse(3, 1, "Dep 1", "Lara Croft cre", 300F);
         // Тест
-        WorkerResponse actualResponse = salaryService.workerCreate(workerRequest3);
+        WorkerResponse actualResponse = salaryService.workerCreate(workerCreateRequest3);
         // Проверка результата
         assertEquals(expectedResponse, actualResponse);
         verify(workerRepository, Mockito.times(1)).save(any());
-    }
-
-    @Test
-    void workerCreate_exception() {
-        // Подготовка данных
-        PrepareData();
-        // Тест
-        assertThrows(RecordExistsException.class, () -> salaryService.workerCreate(workerRequest1));
-        // Проверка результата
-        verify(workerRepository, Mockito.times(0)).save(any());
     }
 
     @Test
@@ -295,10 +279,9 @@ public class SalaryServiceTest {
     void workerUpdate_success() {
         // Подготовка данных
         PrepareData();
-        WorkerRequest request = new WorkerRequest(1, 1, "New name", 350F);
-        WorkerResponse expectedResponse = new WorkerResponse(1, 1, "Dep 1", "New name", 350F);
+        WorkerResponse expectedResponse = new WorkerResponse(1, 1, "Dep 1", "Thomas Anderson upd", 500F);
         // Тест
-        WorkerResponse actualResponse = salaryService.workerUpdate(request);
+        WorkerResponse actualResponse = salaryService.workerUpdate(workerUpdateRequest1);
         // Проверка результата
         assertEquals(expectedResponse, actualResponse);
         verify(workerRepository, Mockito.times(1)).update(any());
@@ -309,7 +292,7 @@ public class SalaryServiceTest {
         // Подготовка данных
         PrepareData();
         // Тест
-        assertThrows(RecordNotExistsException.class, () -> salaryService.workerUpdate(workerRequest3));
+        assertThrows(RecordNotExistsException.class, () -> salaryService.workerUpdate(workerUpdateRequest3));
         // Проверка результата
         verify(workerRepository, Mockito.times(0)).update(any());
     }
@@ -345,20 +328,10 @@ public class SalaryServiceTest {
         PrepareData();
         PaymentOrderResponse expectedResponse = new PaymentOrderResponse(3, 1, "Thomas Anderson", new Date(2024, 03, 15), 30F);
         // Тест
-        PaymentOrderResponse actualResponse = salaryService.paymentOrderCreate(paymentRequest3);
+        PaymentOrderResponse actualResponse = salaryService.paymentOrderCreate(paymentCreateRequest3);
         // Проверка результата
         assertEquals(expectedResponse, actualResponse);
         verify(paymentOrderRepository, Mockito.times(1)).save(any());
-    }
-
-    @Test
-    void paymentCreate_exception() {
-        // Подготовка данных
-        PrepareData();
-        // Тест
-        assertThrows(RecordExistsException.class, () -> salaryService.paymentOrderCreate(paymentRequest1));
-        // Проверка результата
-        verify(paymentOrderRepository, Mockito.times(0)).save(any());
     }
 
     @Test
@@ -394,10 +367,9 @@ public class SalaryServiceTest {
     void paymentUpdate_success() {
         // Подготовка данных
         PrepareData();
-        PaymentOrderRequest request = new PaymentOrderRequest(1, 1, new Date(2024, 03, 20), 500F);
-        PaymentOrderResponse expectedResponse = new PaymentOrderResponse(1, 1, "Thomas Anderson", new Date(2024, 03, 20), 500F);
+        PaymentOrderResponse expectedResponse = new PaymentOrderResponse(1, 1, "Thomas Anderson", new Date(2024, 03, 16), 100F);
         // Тест
-        PaymentOrderResponse actualResponse = salaryService.paymentOrderUpdate(request);
+        PaymentOrderResponse actualResponse = salaryService.paymentOrderUpdate(paymentUpdateRequest1);
         // Проверка результата
         assertEquals(expectedResponse, actualResponse);
         verify(paymentOrderRepository, Mockito.times(1)).update(any());
@@ -408,7 +380,7 @@ public class SalaryServiceTest {
         // Подготовка данных
         PrepareData();
         // Тест
-        assertThrows(RecordNotExistsException.class, () -> salaryService.paymentOrderUpdate(paymentRequest3));
+        assertThrows(RecordNotExistsException.class, () -> salaryService.paymentOrderUpdate(paymentUpdateRequest3));
         // Проверка результата
         verify(paymentOrderRepository, Mockito.times(0)).update(any());
     }

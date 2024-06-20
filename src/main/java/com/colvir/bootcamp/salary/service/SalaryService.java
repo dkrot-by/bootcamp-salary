@@ -1,7 +1,6 @@
 package com.colvir.bootcamp.salary.service;
 
 import com.colvir.bootcamp.salary.dto.*;
-import com.colvir.bootcamp.salary.exception.RecordExistsException;
 import com.colvir.bootcamp.salary.exception.RecordNotExistsException;
 import com.colvir.bootcamp.salary.exception.SpawnedRecordsException;
 import com.colvir.bootcamp.salary.mapper.DepartmentMapper;
@@ -31,14 +30,9 @@ public class SalaryService {
 // Подразделение
 
     // Создание записи по запросу от API
-    public DepartmentResponse departmentCreate(DepartmentRequest request) {
-        // Проверка на то, что подразделение уже есть
-        if (departmentRepository.getById(request.getId()) != null) {
-            throw new RecordExistsException(String.format("Подразделение с id = %s уже существует", request.getId()));
-        }
-        Department department = departmentMapper.requestToDepartment(request);
-        departmentRepository.save(department);
-        return departmentMapper.departmentToResponse(department);
+    public DepartmentResponse departmentCreate(DepartmentCreateRequest request) {
+        Department department = departmentMapper.createRequestToDepartment(request);
+        return departmentMapper.departmentToResponse(departmentRepository.save(department));
     }
 
     // Передача списка записей по запросу от API
@@ -56,13 +50,13 @@ public class SalaryService {
     }
 
     // Обновление записи по запросу от API
-    public DepartmentResponse departmentUpdate(DepartmentRequest request) {
+    public DepartmentResponse departmentUpdate(DepartmentUpdateRequest request) {
         if (departmentRepository.getById(request.getId()) == null) {
             throw new RecordNotExistsException(String.format("Подразделение с id = %s не найдено", request.getId()));
         }
-        Department department = departmentMapper.requestToDepartment(request);
-        departmentRepository.update(department);
-        return departmentMapper.departmentToResponse(department);
+        Department department = departmentMapper.updateRequestToDepartment(request);
+        Department departmentResult = departmentRepository.update(department);
+        return departmentMapper.departmentToResponse(departmentResult);
     }
 
     // Удаление записи по запросу от API
@@ -83,18 +77,14 @@ public class SalaryService {
 // Работник
 
     // Создание записи по запросу от API
-    public WorkerResponse workerCreate(WorkerRequest request) {
-        if (workerRepository.getById(request.getId()) != null) {
-            throw new RecordExistsException(String.format("Работник с id = %s уже существует", request.getId()));
-        }
+    public WorkerResponse workerCreate(WorkerCreateRequest request) {
         Department department = departmentRepository.getById(request.getDepartmentId());
         if (department == null) {
             throw new RecordNotExistsException(String.format("Подразделение с id = %s не найдено", request.getDepartmentId()));
         }
-        Worker worker = workerMapper.requestToWorker(request);
+        Worker worker = workerMapper.createRequestToWorker(request);
         worker.setDepartment(department);
-        workerRepository.save(worker);
-        return workerMapper.workerToResponse(worker);
+        return workerMapper.workerToResponse(workerRepository.save(worker));
     }
 
     // Передача списка записей по запросу от API
@@ -112,7 +102,7 @@ public class SalaryService {
     }
 
     // Обновление записи по запросу от API
-    public WorkerResponse workerUpdate(WorkerRequest request) {
+    public WorkerResponse workerUpdate(WorkerUpdateRequest request) {
         if (workerRepository.getById(request.getId()) == null) {
             throw new RecordNotExistsException(String.format("Работник с id = %s не найден", request.getId()));
         }
@@ -120,7 +110,7 @@ public class SalaryService {
         if (department == null) {
             throw new RecordNotExistsException(String.format("Подразделение с id = %s не найдено", request.getDepartmentId()));
         }
-        Worker worker = workerMapper.requestToWorker(request);
+        Worker worker = workerMapper.updateRequestToWorker(request);
         worker.setDepartment(department);
         workerRepository.update(worker);
         return workerMapper.workerToResponse(worker);
@@ -144,19 +134,14 @@ public class SalaryService {
 // Платежное поручение
 
     // Создание записи по запросу от API
-    public PaymentOrderResponse paymentOrderCreate(PaymentOrderRequest request) {
-        // Проверка на то, что платеж уже есть
-        if (paymentOrderRepository.getById(request.getId()) != null) {
-            throw new RecordExistsException(String.format("Платежное поручение с id = %s уже существует", request.getId()));
-        }
+    public PaymentOrderResponse paymentOrderCreate(PaymentOrderCreateRequest request) {
         Worker worker = workerRepository.getById(request.getWorkerId());
         if (worker == null) {
             throw new RecordNotExistsException(String.format("Работник с id = %s не найден", request.getWorkerId()));
         }
-        PaymentOrder paymentOrder = paymentOrderMapper.RequestToPaymentOrder(request);
+        PaymentOrder paymentOrder = paymentOrderMapper.createRequestToPaymentOrder(request);
         paymentOrder.setWorker(worker);
-        paymentOrderRepository.save(paymentOrder);
-        return paymentOrderMapper.paymentOrderToResponse(paymentOrder);
+        return paymentOrderMapper.paymentOrderToResponse(paymentOrderRepository.save(paymentOrder));
     }
 
     // Передача списка записей по запросу от API
@@ -174,7 +159,7 @@ public class SalaryService {
     }
 
     // Обновление записи по запросу от API
-    public PaymentOrderResponse paymentOrderUpdate(PaymentOrderRequest request) {
+    public PaymentOrderResponse paymentOrderUpdate(PaymentOrderUpdateRequest request) {
         if (paymentOrderRepository.getById(request.getId()) == null) {
             throw new RecordNotExistsException(String.format("Платежное поручение с id = %s не найдено", request.getId()));
         }
@@ -182,7 +167,7 @@ public class SalaryService {
         if (worker == null) {
             throw new RecordNotExistsException(String.format("Работник с id = %s не найден", request.getWorkerId()));
         }
-        PaymentOrder paymentOrder = paymentOrderMapper.RequestToPaymentOrder(request);
+        PaymentOrder paymentOrder = paymentOrderMapper.updateRequestToPaymentOrder(request);
         paymentOrder.setWorker(worker);
         paymentOrderRepository.update(paymentOrder);
         return paymentOrderMapper.paymentOrderToResponse(paymentOrder);

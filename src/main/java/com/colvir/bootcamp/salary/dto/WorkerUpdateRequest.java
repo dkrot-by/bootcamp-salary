@@ -1,6 +1,6 @@
 /*
-Запрос к сервису: Работник
-* */
+Запрос к сервису: изменение Работника
+*/
 package com.colvir.bootcamp.salary.dto;
 
 import lombok.AllArgsConstructor;
@@ -8,7 +8,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class WorkerRequest {
+public class WorkerUpdateRequest {
 
     private Integer id;
     private Integer departmentId;
