@@ -1,0 +1,7 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2
+      author: dkrot-by
+      changes:
+        - sql:
+            sql: alter table departments owner to postgres;
