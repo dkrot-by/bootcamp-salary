@@ -8,9 +8,7 @@ import com.colvir.bootcamp.salary.mapper.WorkerMapperImpl;
 import com.colvir.bootcamp.salary.model.Department;
 import com.colvir.bootcamp.salary.model.PaymentOrder;
 import com.colvir.bootcamp.salary.model.Worker;
-import com.colvir.bootcamp.salary.repository.DepartmentRepository;
-import com.colvir.bootcamp.salary.repository.PaymentOrderRepository;
-import com.colvir.bootcamp.salary.repository.WorkerRepository;
+import com.colvir.bootcamp.salary.repository.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
@@ -47,16 +45,22 @@ public class SalaryServiceTest {
     private DepartmentRepository departmentRepository;
 
     @MockBean
+    private DepartmentCacheRepository departmentCacheRepository;
+
+    @MockBean
     private WorkerRepository workerRepository;
+
+    @MockBean
+    private WorkerCacheRepository workerCacheRepository;
 
     @MockBean
     private PaymentOrderRepository paymentOrderRepository;
 
     // Подразделение: Тестовые данные
-    private final Department department1 = new Department(1, "Dep 1", null);
-    private final Department department2 = new Department(2, "Dep 2", null);
-    private final Department department3Cre = new Department(3, "Dep 3 cre", null);
-    private final Department department1Upd = new Department(1, "Dep 1 upd", null);
+    private final Department department1 = new Department(1, "Dep 1");
+    private final Department department2 = new Department(2, "Dep 2");
+    private final Department department3Cre = new Department(3, "Dep 3 cre");
+    private final Department department1Upd = new Department(1, "Dep 1 upd");
     private final DepartmentCreateRequest departmentCreateRequest3 = new DepartmentCreateRequest("Dep 3 cre");
     private final DepartmentUpdateRequest departmentUpdateRequest1 = new DepartmentUpdateRequest(1, "Dep 1 upd");
     private final DepartmentUpdateRequest departmentUpdateRequest3 = new DepartmentUpdateRequest(3, "Dep 3 upd");
@@ -64,10 +68,10 @@ public class SalaryServiceTest {
     private DepartmentListResponse departmentResponseList = null;
 
     // Работник: Тестовые данные
-    private final Worker worker1 = new Worker(1, "Thomas Anderson", 100F, department1, null);
-    private final Worker worker2 = new Worker(2, "John Connor", 200F, department1, null);
-    private final Worker worker3Cre = new Worker(3, "Lara Croft cre", 300F, department1, null);
-    private final Worker worker1Upd = new Worker(1, "Thomas Anderson upd", 500F, department1, null);
+    private final Worker worker1 = new Worker(1, "Thomas Anderson", 100F, department1);
+    private final Worker worker2 = new Worker(2, "John Connor", 200F, department1);
+    private final Worker worker3Cre = new Worker(3, "Lara Croft cre", 300F, department1);
+    private final Worker worker1Upd = new Worker(1, "Thomas Anderson upd", 500F, department1);
     private final WorkerCreateRequest workerCreateRequest3 = new WorkerCreateRequest(1, "Lara Croft cre", 300F);
     private final WorkerUpdateRequest workerUpdateRequest1 = new WorkerUpdateRequest(1, 1, "Thomas Anderson upd", 500F);
     private final WorkerUpdateRequest workerUpdateRequest3 = new WorkerUpdateRequest(3, 1, "Lara Croft upd", 300F);
@@ -98,6 +102,7 @@ public class SalaryServiceTest {
             departmentResponses.add(new DepartmentResponse(2, "Dep 2"));
             departmentResponseList = new DepartmentListResponse(departmentResponses);
         }
+        when(departmentCacheRepository.findById(any())).thenReturn(Optional.empty());
         when(departmentRepository.save(any())).thenReturn(department3Cre);
         when(departmentRepository.save(department1Upd)).thenReturn(department1Upd);
         when(departmentRepository.findById(1)).thenReturn(Optional.of(department1));
@@ -117,6 +122,7 @@ public class SalaryServiceTest {
             workerResponses.add(new WorkerResponse(2, 1, "Dep 1", "John Connor", 200F));
             workerResponseList = new WorkerListResponse(workerResponses);
         }
+        when(workerCacheRepository.findById(any())).thenReturn(Optional.empty());
         when(workerRepository.save(any())).thenReturn(worker3Cre);
         when(workerRepository.save(worker1Upd)).thenReturn(worker1Upd);
         when(workerRepository.findById(1)).thenReturn(Optional.of(worker1));

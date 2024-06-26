@@ -10,8 +10,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -28,7 +26,10 @@ public class Worker {
     @ManyToOne
     @JoinColumn(name = "department_id", referencedColumnName = "id")
     private Department department;
-    @OneToMany(mappedBy = "worker")
-    private List<PaymentOrder> paymentOrders;
+//TODO: Изучить вопрос: в двух связанных сущностях есть ссылки друг на друга, из-за чего при некоторых авто-выгрузках
+//      получается рекурсия(?) (пример, objectMapper.writeValueAsString(worker))
+//      пока эта ссылка не нужна нигде
+//    @OneToMany(mappedBy = "worker")
+//    private List<PaymentOrder> paymentOrders;
 
 }
