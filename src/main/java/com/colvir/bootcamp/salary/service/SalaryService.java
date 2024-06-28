@@ -9,11 +9,11 @@ import com.colvir.bootcamp.salary.mapper.WorkerMapper;
 import com.colvir.bootcamp.salary.model.Department;
 import com.colvir.bootcamp.salary.model.PaymentOrder;
 import com.colvir.bootcamp.salary.model.Worker;
-import com.colvir.bootcamp.salary.repository.DepartmentRepository;
-import com.colvir.bootcamp.salary.repository.PaymentOrderRepository;
-import com.colvir.bootcamp.salary.repository.WorkerRepository;
+import com.colvir.bootcamp.salary.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +25,8 @@ public class SalaryService {
     private final DepartmentRepository departmentRepository;
     private final WorkerRepository workerRepository;
     private final PaymentOrderRepository paymentOrderRepository;
+    private final DepartmentCacheRepository departmentCacheRepository;
+    private final WorkerCacheRepository workerCacheRepository;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Подразделение
@@ -42,9 +44,15 @@ public class SalaryService {
 
     // Передача записи по запросу от API
     public DepartmentResponse departmentGetById(Integer id) {
-        Department department = departmentRepository.findById(id)
-                .orElseThrow(() -> new RecordNotExistsException(String.format("Подразделение с id = %s не найдено", id)));
-        return departmentMapper.departmentToResponse(department);
+        // Сначала поиск записи в кеше
+        Optional<Department> department = departmentCacheRepository.findById(id);
+        if (department.isEmpty()) {
+            // Если нет записи в кеше, поиск записи в базе данных и запись ее в кеш
+            department = Optional.ofNullable(departmentRepository.findById(id)
+                    .orElseThrow(() -> new RecordNotExistsException(String.format("Подразделение с id = %s не найдено", id))));
+            department.ifPresent(departmentCacheRepository::save);
+        }
+        return departmentMapper.departmentToResponse(department.orElse(null));
     }
 
     // Обновление записи по запросу от API
@@ -87,9 +95,15 @@ public class SalaryService {
 
     // Передача записи по запросу от API
     public WorkerResponse workerGetById(Integer id) {
-        Worker worker = workerRepository.findById(id)
-                .orElseThrow(() -> new RecordNotExistsException(String.format("Работник с id = %s не найден", id)));
-        return workerMapper.workerToResponse(worker);
+       // Сначала поиск записи в кеше
+        Optional<Worker> worker = workerCacheRepository.findById(id);
+        if (worker.isEmpty()) {
+            // Если нет записи в кеше, поиск записи в базе данных и запись ее в кеш
+            worker = Optional.ofNullable(workerRepository.findById(id)
+                    .orElseThrow(() -> new RecordNotExistsException(String.format("Работник с id = %s не найден", id))));
+            worker.ifPresent(workerCacheRepository::save);
+        }
+        return workerMapper.workerToResponse((worker.orElse(null)));
     }
 
     // Обновление записи по запросу от API

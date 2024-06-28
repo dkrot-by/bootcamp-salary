@@ -1,0 +1,7 @@
+databaseChangeLog:
+  - changeSet:
+      id: 4
+      author: dkrot-by
+      changes:
+        - sql:
+            sql: alter sequence departments_sequence owner to postgres;

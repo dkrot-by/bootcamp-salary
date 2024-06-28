@@ -1,0 +1,7 @@
+databaseChangeLog:
+  - changeSet:
+      id: 6
+      author: dkrot-by
+      changes:
+        - sql:
+            sql: alter table workers owner to postgres;

@@ -8,8 +8,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -22,7 +20,10 @@ public class Department {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "dep_seq")
     private Integer id;
     private String name;
-    @OneToMany(mappedBy = "department")
-    private List<Worker> workers;
+//TODO: Изучить вопрос: в двух связанных сущностях есть ссылки друг на друга, из-за чего при некоторых авто-выгрузках
+//      получается рекурсия(?) (пример, objectMapper.writeValueAsString(worker))
+//      пока эта ссылка не нужна нигде
+//    @OneToMany(mappedBy = "department")
+//    private List<Worker> workers;
 
 }

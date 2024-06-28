@@ -1,0 +1,7 @@
+databaseChangeLog:
+  - changeSet:
+      id: 11
+      author: dkrot-by
+      changes:
+        - sql:
+            sql: create sequence payments_sequence as integer;

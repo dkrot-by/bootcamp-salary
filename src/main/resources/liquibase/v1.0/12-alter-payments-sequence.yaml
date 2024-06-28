@@ -1,0 +1,7 @@
+databaseChangeLog:
+  - changeSet:
+      id: 12
+      author: dkrot-by
+      changes:
+        - sql:
+            sql: alter sequence payments_sequence owner to postgres;

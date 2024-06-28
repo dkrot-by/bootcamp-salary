@@ -1,0 +1,25 @@
+databaseChangeLog:
+  - include:
+      file: liquibase/v1.0/1-create-departments-table.yaml
+  - include:
+      file: liquibase/v1.0/2-alter-departments-table.yaml
+  - include:
+      file: liquibase/v1.0/3-create-departments-sequence.yaml
+  - include:
+      file: liquibase/v1.0/4-alter-departments-sequence.yaml
+  - include:
+      file: liquibase/v1.0/5-create-workers-table.yaml
+  - include:
+      file: liquibase/v1.0/6-alter-workers-table.yaml
+  - include:
+      file: liquibase/v1.0/7-create-workers-sequence.yaml
+  - include:
+      file: liquibase/v1.0/8-alter-workers-sequence.yaml
+  - include:
+      file: liquibase/v1.0/9-create-payments-table.yaml
+  - include:
+      file: liquibase/v1.0/10-alter-payments-table.yaml
+  - include:
+      file: liquibase/v1.0/11-create-payments-sequence.yaml
+  - include:
+      file: liquibase/v1.0/12-alter-payments-sequence.yaml

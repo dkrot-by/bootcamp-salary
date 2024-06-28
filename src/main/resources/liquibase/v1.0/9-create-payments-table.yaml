@@ -1,0 +1,30 @@
+databaseChangeLog:
+  - changeSet:
+      id: 9
+      author: dkrot-by
+      changes:
+        - createTable:
+            tableName: payments
+            columns:
+              - column:
+                  name: id
+                  type: integer
+                  constraints:
+                    primaryKeyName: payments_pk
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: worker_id
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: date
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: sum
+                  type: real
+                  constraints:
+                    nullable: false

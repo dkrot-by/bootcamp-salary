@@ -1,0 +1,30 @@
+databaseChangeLog:
+  - changeSet:
+      id: 5
+      author: dkrot-by
+      changes:
+        - createTable:
+            tableName: workers
+            columns:
+              - column:
+                  name: id
+                  type: integer
+                  constraints:
+                    primaryKeyName: workers_pk
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: department_id
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: name
+                  type: text
+                  constraints:
+                    nullable: false
+              - column:
+                  name: salary
+                  type: real
+                  constraints:
+                    nullable: true
