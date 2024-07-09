@@ -1,10 +1,9 @@
 package com.colvir.bootcamp.salary.service;
 
+import com.colvir.bootcamp.salary.config.TestConfig;
 import com.colvir.bootcamp.salary.dto.*;
 import com.colvir.bootcamp.salary.exception.RecordNotExistsException;
-import com.colvir.bootcamp.salary.mapper.DepartmentMapperImpl;
-import com.colvir.bootcamp.salary.mapper.PaymentOrderMapperImpl;
-import com.colvir.bootcamp.salary.mapper.WorkerMapperImpl;
+import com.colvir.bootcamp.salary.mapper.*;
 import com.colvir.bootcamp.salary.model.Department;
 import com.colvir.bootcamp.salary.model.PaymentOrder;
 import com.colvir.bootcamp.salary.model.Worker;
@@ -13,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -31,11 +31,12 @@ import static org.mockito.Mockito.*;
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {
         SalaryService.class,
-        DepartmentMapperImpl.class,
-        WorkerMapperImpl.class,
-        PaymentOrderMapperImpl.class
+        DepartmentMapper.class,
+        WorkerMapper.class,
+        PaymentOrderMapper.class
 })
 
+@SpringBootTest(classes = {TestConfig.class})
 public class SalaryServiceTest {
 
     @Autowired
