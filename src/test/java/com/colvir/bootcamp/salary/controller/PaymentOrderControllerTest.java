@@ -6,9 +6,11 @@ import com.colvir.bootcamp.salary.service.SalaryService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
@@ -23,6 +25,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(PaymentOrderController.class)
+//TODO: Не работает аннотация @WithMockUser, поэтому пока отключаю фильтры для тестов, а вместе с ними сносятся права
+@AutoConfigureMockMvc(addFilters = false)
 public class PaymentOrderControllerTest {
 
     @Autowired
@@ -47,6 +51,7 @@ public class PaymentOrderControllerTest {
 
     // Создание: успешно
     @Test
+    @WithMockUser
     void paymentOrderCreate_success() throws Exception {
         when(salaryService.paymentOrderCreate(createRequest)).thenReturn(response);
         mockMvc.perform(MockMvcRequestBuilders
@@ -62,6 +67,7 @@ public class PaymentOrderControllerTest {
 
     // Чтение: успешно
     @Test
+    @WithMockUser
     void paymentOrderGetById_success() throws Exception {
         when(salaryService.paymentOrderGetById(ID)).thenReturn(response);
         mockMvc.perform(MockMvcRequestBuilders
@@ -75,6 +81,7 @@ public class PaymentOrderControllerTest {
 
     // Чтение: ошибка
     @Test
+    @WithMockUser
     void paymentOrderGetById_exception() throws Exception {
         when(salaryService.paymentOrderGetById(ID)).thenThrow(new RecordNotExistsException(notExistsResponse.getMessage()));
         mockMvc.perform(MockMvcRequestBuilders
@@ -88,6 +95,7 @@ public class PaymentOrderControllerTest {
 
     // Чтение всех записей: успешно
     @Test
+    @WithMockUser
     void paymentOrderGetAll_success() throws Exception {
         when(salaryService.paymentOrderGetAll()).thenReturn(listResponse);
         mockMvc.perform(MockMvcRequestBuilders
@@ -101,6 +109,7 @@ public class PaymentOrderControllerTest {
 
     // Изменение: успешно
     @Test
+    @WithMockUser
     void paymentOrderUpdate_success() throws Exception {
         when(salaryService.paymentOrderUpdate(updateRequest)).thenReturn(response);
         mockMvc.perform(MockMvcRequestBuilders
@@ -116,6 +125,7 @@ public class PaymentOrderControllerTest {
 
     // Изменение: ошибка
     @Test
+    @WithMockUser
     void paymentOrderUpdate_exception() throws Exception {
         when(salaryService.paymentOrderUpdate(updateRequest)).thenThrow(new RecordNotExistsException(notExistsResponse.getMessage()));
         mockMvc.perform(MockMvcRequestBuilders
@@ -131,6 +141,7 @@ public class PaymentOrderControllerTest {
 
     // Удаление: успешно
     @Test
+    @WithMockUser
     void paymentOrderDelete_success() throws Exception {
         when(salaryService.paymentOrderDelete(ID)).thenReturn(response);
         mockMvc.perform(MockMvcRequestBuilders
@@ -144,6 +155,7 @@ public class PaymentOrderControllerTest {
 
     // Удаление: ошибка
     @Test
+    @WithMockUser
     void paymentOrderDelete_exception() throws Exception {
         when(salaryService.paymentOrderDelete(ID)).thenThrow(new RecordNotExistsException(notExistsResponse.getMessage()));
         mockMvc.perform(MockMvcRequestBuilders

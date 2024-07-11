@@ -3,6 +3,7 @@ package com.colvir.bootcamp.salary.controller;
 import com.colvir.bootcamp.salary.dto.ErrorResponse;
 import com.colvir.bootcamp.salary.exception.RecordNotExistsException;
 import com.colvir.bootcamp.salary.exception.SpawnedRecordsException;
+import com.colvir.bootcamp.salary.exception.UserNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -25,6 +26,12 @@ public class ExceptionHandlerController {
     public ResponseEntity<ErrorResponse> handleSpawnedRecordsException(Exception e) {
         ErrorResponse errorResponse = new ErrorResponse(THERE_ARE_SPAWNED_RECORDS, e.getMessage());
         return new ResponseEntity<ErrorResponse>(errorResponse, HttpStatus.FAILED_DEPENDENCY);
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleUserNotFoundException(Exception e) {
+        ErrorResponse errorResponse = new ErrorResponse(USER_DOES_NOT_EXIST, e.getMessage());
+        return new ResponseEntity<ErrorResponse>(errorResponse, HttpStatus.NOT_FOUND);
     }
 
 }

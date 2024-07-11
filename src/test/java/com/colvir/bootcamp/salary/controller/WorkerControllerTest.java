@@ -6,9 +6,11 @@ import com.colvir.bootcamp.salary.service.SalaryService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
@@ -21,6 +23,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(WorkerController.class)
+//TODO: Не работает аннотация @WithMockUser, поэтому пока отключаю фильтры для тестов, а вместе с ними сносятся права
+@AutoConfigureMockMvc(addFilters = false)
 public class WorkerControllerTest {
 
     @Autowired
@@ -45,6 +49,7 @@ public class WorkerControllerTest {
 
     // Создание: успешно
     @Test
+    @WithMockUser
     void workerCreate_success() throws Exception {
         when(salaryService.workerCreate(createRequest)).thenReturn(response);
         mockMvc.perform(MockMvcRequestBuilders
@@ -60,6 +65,7 @@ public class WorkerControllerTest {
 
     // Чтение: успешно
     @Test
+    @WithMockUser
     void workerGetById_success() throws Exception {
         when(salaryService.workerGetById(ID)).thenReturn(response);
         mockMvc.perform(MockMvcRequestBuilders
@@ -73,6 +79,7 @@ public class WorkerControllerTest {
 
     // Чтение: ошибка
     @Test
+    @WithMockUser
     void workerGetById_exception() throws Exception {
         when(salaryService.workerGetById(ID)).thenThrow(new RecordNotExistsException(notExistsResponse.getMessage()));
         mockMvc.perform(MockMvcRequestBuilders
@@ -86,6 +93,7 @@ public class WorkerControllerTest {
 
     // Чтение всех записей: успешно
     @Test
+    @WithMockUser
     void workerGetAll_success() throws Exception {
         when(salaryService.workerGetAll()).thenReturn(listResponse);
         mockMvc.perform(MockMvcRequestBuilders
@@ -99,6 +107,7 @@ public class WorkerControllerTest {
 
     // Изменение: успешно
     @Test
+    @WithMockUser
     void workerUpdate_success() throws Exception {
         when(salaryService.workerUpdate(updateRequest)).thenReturn(response);
         mockMvc.perform(MockMvcRequestBuilders
@@ -114,6 +123,7 @@ public class WorkerControllerTest {
 
     // Изменение: ошибка
     @Test
+    @WithMockUser
     void workerUpdate_exception() throws Exception {
         when(salaryService.workerUpdate(updateRequest)).thenThrow(new RecordNotExistsException(notExistsResponse.getMessage()));
         mockMvc.perform(MockMvcRequestBuilders
@@ -129,6 +139,7 @@ public class WorkerControllerTest {
 
     // Удаление: успешно
     @Test
+    @WithMockUser
     void workerDelete_success() throws Exception {
         when(salaryService.workerDelete(ID)).thenReturn(response);
         mockMvc.perform(MockMvcRequestBuilders
@@ -142,6 +153,7 @@ public class WorkerControllerTest {
 
     // Удаление: ошибка
     @Test
+    @WithMockUser
     void workerDelete_exception() throws Exception {
         when(salaryService.workerDelete(ID)).thenThrow(new RecordNotExistsException(notExistsResponse.getMessage()));
         mockMvc.perform(MockMvcRequestBuilders

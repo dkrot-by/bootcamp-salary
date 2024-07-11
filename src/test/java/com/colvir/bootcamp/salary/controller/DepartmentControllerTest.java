@@ -6,9 +6,11 @@ import com.colvir.bootcamp.salary.service.SalaryService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
@@ -20,6 +22,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(DepartmentController.class)
+//TODO: Не работает аннотация @WithMockUser, поэтому пока отключаю фильтры для тестов, а вместе с ними сносятся права
+@AutoConfigureMockMvc(addFilters = false)
 public class DepartmentControllerTest {
 
     @Autowired
@@ -44,6 +48,7 @@ public class DepartmentControllerTest {
 
     // Создание: успешно
     @Test
+    @WithMockUser
     void departmentCreate_success() throws Exception {
         when(salaryService.departmentCreate(createRequest)).thenReturn(response);
         mockMvc.perform(MockMvcRequestBuilders
@@ -59,6 +64,7 @@ public class DepartmentControllerTest {
 
     // Чтение: успешно
     @Test
+    @WithMockUser
     void departmentGetById_success() throws Exception {
         when(salaryService.departmentGetById(ID)).thenReturn(response);
         mockMvc.perform(MockMvcRequestBuilders
@@ -72,6 +78,7 @@ public class DepartmentControllerTest {
 
     // Чтение: ошибка
     @Test
+    @WithMockUser
     void departmentGetById_exception() throws Exception {
         when(salaryService.departmentGetById(ID)).thenThrow(new RecordNotExistsException(notExistsResponse.getMessage()));
         mockMvc.perform(MockMvcRequestBuilders
@@ -85,6 +92,7 @@ public class DepartmentControllerTest {
 
     // Чтение всех записей: успешно
     @Test
+    @WithMockUser
     void departmentGetAll_success() throws Exception {
         when(salaryService.departmentGetAll()).thenReturn(listResponse);
         mockMvc.perform(MockMvcRequestBuilders
@@ -98,6 +106,7 @@ public class DepartmentControllerTest {
 
     // Изменение: успешно
     @Test
+    @WithMockUser
     void departmentUpdate_success() throws Exception {
         when(salaryService.departmentUpdate(updateRequest)).thenReturn(response);
         mockMvc.perform(MockMvcRequestBuilders
@@ -113,6 +122,7 @@ public class DepartmentControllerTest {
 
     // Изменение: ошибка
     @Test
+    @WithMockUser
     void departmentUpdate_exception() throws Exception {
         when(salaryService.departmentUpdate(updateRequest)).thenThrow(new RecordNotExistsException(notExistsResponse.getMessage()));
         mockMvc.perform(MockMvcRequestBuilders
@@ -128,6 +138,7 @@ public class DepartmentControllerTest {
 
     // Удаление: успешно
     @Test
+    @WithMockUser(roles = "ADMIN")
     void departmentDelete_success() throws Exception {
         when(salaryService.departmentDelete(ID)).thenReturn(response);
         mockMvc.perform(MockMvcRequestBuilders
@@ -141,6 +152,7 @@ public class DepartmentControllerTest {
 
     // Удаление: ошибка
     @Test
+    @WithMockUser(roles = "ADMIN")
     void departmentDelete_exception() throws Exception {
         when(salaryService.departmentDelete(ID)).thenThrow(new RecordNotExistsException(notExistsResponse.getMessage()));
         mockMvc.perform(MockMvcRequestBuilders

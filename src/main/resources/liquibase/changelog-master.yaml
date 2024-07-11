@@ -23,3 +23,14 @@ databaseChangeLog:
       file: liquibase/v1.0/11-create-payments-sequence.yaml
   - include:
       file: liquibase/v1.0/12-alter-payments-sequence.yaml
+
+  - include:
+      file: liquibase/v1.1/13-create-users-table.yaml
+  - include:
+      file: liquibase/v1.1/14-alter-users-table.yaml
+  - include:
+      file: liquibase/v1.1/15-create-users-sequence.yaml
+  - include:
+      file: liquibase/v1.1/16-insert-users-table-admin.yaml
+  - include:
+      file: liquibase/v1.1/17-insert-users-table-user.yaml

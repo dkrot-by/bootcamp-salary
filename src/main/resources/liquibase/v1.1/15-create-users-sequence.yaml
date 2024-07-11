@@ -1,0 +1,7 @@
+databaseChangeLog:
+  - changeSet:
+      id: 15
+      author: dkrot-by
+      changes:
+        - sql:
+            sql: create sequence users_sequence as integer;
