@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: 2
+      id: 16
       author: dkrot-by
       preConditions:
         - dbms:
@@ -8,4 +8,4 @@ databaseChangeLog:
         - onFail: CONTINUE
       changes:
         - sql:
-            sql: alter table departments owner to postgres;
+            sql: alter sequence users_sequence owner to postgres;

@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: 16
+      id: 18
       author: dkrot-by
       changes:
         - insert:
@@ -8,13 +8,13 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  value: 1
+                  value: 2
               - column:
                   name: username
-                  value: "admin"
+                  value: "user"
               - column:
                   name: password
-                  value: "admin"
+                  value: "user"
               - column:
                   name: roles
-                  value: "ADMIN,USER"
+                  value: "USER"

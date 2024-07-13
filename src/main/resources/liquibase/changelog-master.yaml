@@ -31,6 +31,8 @@ databaseChangeLog:
   - include:
       file: liquibase/v1.1/15-create-users-sequence.yaml
   - include:
-      file: liquibase/v1.1/16-insert-users-table-admin.yaml
+      file: liquibase/v1.1/16-alter-users-sequence.yaml
   - include:
-      file: liquibase/v1.1/17-insert-users-table-user.yaml
+      file: liquibase/v1.1/17-insert-users-table-admin.yaml
+  - include:
+      file: liquibase/v1.1/18-insert-users-table-user.yaml

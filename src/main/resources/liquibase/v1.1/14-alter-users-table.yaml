@@ -2,6 +2,10 @@ databaseChangeLog:
   - changeSet:
       id: 14
       author: dkrot-by
+      preConditions:
+        - dbms:
+            type: postgresql
+        - onFail: CONTINUE
       changes:
         - sql:
             sql: alter table users owner to postgres;

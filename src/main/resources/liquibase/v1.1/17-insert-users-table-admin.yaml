@@ -8,13 +8,13 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  value: 2
+                  value: 1
               - column:
                   name: username
-                  value: "user"
+                  value: "admin"
               - column:
                   name: password
-                  value: "user"
+                  value: "admin"
               - column:
                   name: roles
-                  value: "USER"
+                  value: "ADMIN,USER"
