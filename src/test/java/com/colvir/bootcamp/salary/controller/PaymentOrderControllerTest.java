@@ -4,15 +4,17 @@ import com.colvir.bootcamp.salary.dto.*;
 import com.colvir.bootcamp.salary.exception.RecordNotExistsException;
 import com.colvir.bootcamp.salary.service.SalaryService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
 import java.sql.Date;
 import java.time.LocalDate;
@@ -25,12 +27,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(PaymentOrderController.class)
-//TODO: Не работает аннотация @WithMockUser, поэтому пока отключаю фильтры для тестов, а вместе с ними сносятся права
-@AutoConfigureMockMvc(addFilters = false)
 public class PaymentOrderControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @Autowired
+    private WebApplicationContext context;
+
+    @BeforeEach
+    public void setUp() {
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
+    }
 
     @MockBean
     private SalaryService salaryService;
