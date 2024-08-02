@@ -23,7 +23,7 @@ public class Config {
     private final int redisPort;
 
     public Config(
-            @Value("${database.driver}") String driver,
+            @Value("${spring.datasource.driver-class-name}") String driver,
             @Value("${spring.datasource.url}") String url,
             @Value("${spring.datasource.username}") String username,
             @Value("${spring.datasource.password}") String password,

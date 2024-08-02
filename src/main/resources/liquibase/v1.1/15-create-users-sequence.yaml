@@ -1,9 +1,9 @@
 databaseChangeLog:
   - changeSet:
-      id: 7
+      id: 15
       author: dkrot-by
       changes:
         - createSequence:
-            sequenceName: workers_sequence
+            sequenceName: users_sequence
             startValue: 1
             incrementBy: 1

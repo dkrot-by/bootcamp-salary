@@ -3,5 +3,7 @@ databaseChangeLog:
       id: 3
       author: dkrot-by
       changes:
-        - sql:
-            sql: create sequence departments_sequence as integer;
+        - createSequence:
+            sequenceName: departments_sequence
+            startValue: 1
+            incrementBy: 1

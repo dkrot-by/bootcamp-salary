@@ -1,19 +1,21 @@
 package com.colvir.bootcamp.salary.service;
 
+import com.colvir.bootcamp.salary.config.TestConfig;
 import com.colvir.bootcamp.salary.dto.*;
 import com.colvir.bootcamp.salary.exception.RecordNotExistsException;
-import com.colvir.bootcamp.salary.mapper.DepartmentMapperImpl;
-import com.colvir.bootcamp.salary.mapper.PaymentOrderMapperImpl;
-import com.colvir.bootcamp.salary.mapper.WorkerMapperImpl;
+import com.colvir.bootcamp.salary.mapper.*;
 import com.colvir.bootcamp.salary.model.Department;
 import com.colvir.bootcamp.salary.model.PaymentOrder;
 import com.colvir.bootcamp.salary.model.Worker;
 import com.colvir.bootcamp.salary.repository.*;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -31,11 +33,12 @@ import static org.mockito.Mockito.*;
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {
         SalaryService.class,
-        DepartmentMapperImpl.class,
-        WorkerMapperImpl.class,
-        PaymentOrderMapperImpl.class
+        DepartmentMapper.class,
+        WorkerMapper.class,
+        PaymentOrderMapper.class
 })
-
+@SpringBootTest(classes = {TestConfig.class})
+@ActiveProfiles("test")
 public class SalaryServiceTest {
 
     @Autowired
@@ -90,6 +93,7 @@ public class SalaryServiceTest {
     private PaymentOrderListResponse paymentResponseList = null;
 
     // Подготовка данных, заглушки для репозитория
+    @BeforeEach
     private void PrepareData() {
         // Подразделение
         if (departments.isEmpty()) {
@@ -156,8 +160,6 @@ public class SalaryServiceTest {
 
     @Test
     void departmentCreate_success() {
-        // Подготовка данных
-        PrepareData();
         DepartmentResponse expectedResponse = new DepartmentResponse(3,"Dep 3 cre");
         // Тест
         DepartmentResponse actualResponse = salaryService.departmentCreate(departmentCreateRequest3);
@@ -168,8 +170,6 @@ public class SalaryServiceTest {
 
     @Test
     void departmentRead_success() {
-        // Подготовка данных
-        PrepareData();
         DepartmentResponse expectedResponse = new DepartmentResponse(1,"Dep 1");
         // Тест
         DepartmentResponse actualResponse = salaryService.departmentGetById(1);
@@ -179,8 +179,6 @@ public class SalaryServiceTest {
 
     @Test
     void departmentReadList_success() {
-        // Подготовка данных
-        PrepareData();
         // Тест
         DepartmentListResponse actualResponse = salaryService.departmentGetAll();
         // Проверка результата
@@ -189,16 +187,12 @@ public class SalaryServiceTest {
 
     @Test
     void departmentRead_exception() {
-        // Подготовка данных
-        PrepareData();
         // Тест
         assertThrows(RecordNotExistsException.class, () -> salaryService.departmentGetById(3));
     }
 
     @Test
     void departmentUpdate_success() {
-        // Подготовка данных
-        PrepareData();
         DepartmentResponse expectedResponse = new DepartmentResponse(1,"Dep 1 upd");
         // Тест
         DepartmentResponse actualResponse = salaryService.departmentUpdate(departmentUpdateRequest1);
@@ -209,8 +203,6 @@ public class SalaryServiceTest {
 
     @Test
     void departmentUpdate_exception() {
-        // Подготовка данных
-        PrepareData();
         // Тест
         assertThrows(RecordNotExistsException.class, () -> salaryService.departmentUpdate(departmentUpdateRequest3));
         // Проверка результата
@@ -219,8 +211,6 @@ public class SalaryServiceTest {
 
     @Test
     void departmentDelete_success() {
-        // Подготовка данных
-        PrepareData();
         DepartmentResponse expectedResponse = new DepartmentResponse(1,"Dep 1");
         // Тест
         DepartmentResponse actualResponse = salaryService.departmentDelete(1);
@@ -231,8 +221,6 @@ public class SalaryServiceTest {
 
     @Test
     void departmentDelete_exception() {
-        // Подготовка данных
-        PrepareData();
         // Тест
         assertThrows(RecordNotExistsException.class, () -> salaryService.departmentDelete(3));
         // Проверка результата
@@ -244,8 +232,6 @@ public class SalaryServiceTest {
 
     @Test
     void workerCreate_success() {
-        // Подготовка данных
-        PrepareData();
         WorkerResponse expectedResponse = new WorkerResponse(3, 1, "Dep 1", "Lara Croft cre", 300F);
         // Тест
         WorkerResponse actualResponse = salaryService.workerCreate(workerCreateRequest3);
@@ -256,8 +242,6 @@ public class SalaryServiceTest {
 
     @Test
     void workerRead_success() {
-        // Подготовка данных
-        PrepareData();
         WorkerResponse expectedResponse = new WorkerResponse(1, 1, "Dep 1", "Thomas Anderson", 100F);
         // Тест
         WorkerResponse actualResponse = salaryService.workerGetById(1);
@@ -267,8 +251,6 @@ public class SalaryServiceTest {
 
     @Test
     void workerReadList_success() {
-        // Подготовка данных
-        PrepareData();
         // Тест
         WorkerListResponse actualResponse = salaryService.workerGetAll();
         // Проверка результата
@@ -277,16 +259,12 @@ public class SalaryServiceTest {
 
     @Test
     void workerRead_exception() {
-        // Подготовка данных
-        PrepareData();
         // Тест
         assertThrows(RecordNotExistsException.class, () -> salaryService.workerGetById(3));
     }
 
     @Test
     void workerUpdate_success() {
-        // Подготовка данных
-        PrepareData();
         WorkerResponse expectedResponse = new WorkerResponse(1, 1, "Dep 1", "Thomas Anderson upd", 500F);
         // Тест
         WorkerResponse actualResponse = salaryService.workerUpdate(workerUpdateRequest1);
@@ -297,8 +275,6 @@ public class SalaryServiceTest {
 
     @Test
     void workerUpdate_exception() {
-        // Подготовка данных
-        PrepareData();
         // Тест
         assertThrows(RecordNotExistsException.class, () -> salaryService.workerUpdate(workerUpdateRequest3));
         // Проверка результата
@@ -307,8 +283,6 @@ public class SalaryServiceTest {
 
     @Test
     void workerDelete_success() {
-        // Подготовка данных
-        PrepareData();
         WorkerResponse expectedResponse = new WorkerResponse(1, 1, "Dep 1", "Thomas Anderson", 100F);
         // Тест
         WorkerResponse actualResponse = salaryService.workerDelete(1);
@@ -319,8 +293,6 @@ public class SalaryServiceTest {
 
     @Test
     void workerDelete_exception() {
-        // Подготовка данных
-        PrepareData();
         // Тест
         assertThrows(RecordNotExistsException.class, () -> salaryService.workerDelete(3));
         // Проверка результата
@@ -332,8 +304,6 @@ public class SalaryServiceTest {
 
     @Test
     void paymentCreate_success() {
-        // Подготовка данных
-        PrepareData();
         PaymentOrderResponse expectedResponse = new PaymentOrderResponse(3, 1, "Thomas Anderson", Date.valueOf(LocalDate.of(2024, 3, 15)), 30F);
         // Тест
         PaymentOrderResponse actualResponse = salaryService.paymentOrderCreate(paymentCreateRequest3);
@@ -344,8 +314,6 @@ public class SalaryServiceTest {
 
     @Test
     void paymentRead_success() {
-        // Подготовка данных
-        PrepareData();
         PaymentOrderResponse expectedResponse = new PaymentOrderResponse(1, 1, "Thomas Anderson", Date.valueOf(LocalDate.of(2024, 3, 15)), 15F);
         // Тест
         PaymentOrderResponse actualResponse = salaryService.paymentOrderGetById(1);
@@ -355,8 +323,6 @@ public class SalaryServiceTest {
 
     @Test
     void paymentReadList_success() {
-        // Подготовка данных
-        PrepareData();
         // Тест
         PaymentOrderListResponse actualResponse = salaryService.paymentOrderGetAll();
         // Проверка результата
@@ -365,16 +331,12 @@ public class SalaryServiceTest {
 
     @Test
     void paymentRead_exception() {
-        // Подготовка данных
-        PrepareData();
         // Тест
         assertThrows(RecordNotExistsException.class, () -> salaryService.paymentOrderGetById(3));
     }
 
     @Test
     void paymentUpdate_success() {
-        // Подготовка данных
-        PrepareData();
         PaymentOrderResponse expectedResponse = new PaymentOrderResponse(1, 1, "Thomas Anderson", Date.valueOf(LocalDate.of(2024, 3, 20)), 100F);
         // Тест
         PaymentOrderResponse actualResponse = salaryService.paymentOrderUpdate(paymentUpdateRequest1);
@@ -385,8 +347,6 @@ public class SalaryServiceTest {
 
     @Test
     void paymentUpdate_exception() {
-        // Подготовка данных
-        PrepareData();
         // Тест
         assertThrows(RecordNotExistsException.class, () -> salaryService.paymentOrderUpdate(paymentUpdateRequest3));
         // Проверка результата
@@ -395,8 +355,6 @@ public class SalaryServiceTest {
 
     @Test
     void paymentDelete_success() {
-        // Подготовка данных
-        PrepareData();
         PaymentOrderResponse expectedResponse = new PaymentOrderResponse(1, 1, "Thomas Anderson", Date.valueOf(LocalDate.of(2024, 3, 15)), 15F);
         // Тест
         PaymentOrderResponse actualResponse = salaryService.paymentOrderDelete(1);
@@ -407,8 +365,6 @@ public class SalaryServiceTest {
 
     @Test
     void paymentDelete_exception() {
-        // Подготовка данных
-        PrepareData();
         // Тест
         assertThrows(RecordNotExistsException.class, () -> salaryService.paymentOrderDelete(3));
         // Проверка результата
